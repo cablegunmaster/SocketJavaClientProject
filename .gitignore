@@ -1,0 +1,8 @@
+.idea/compiler.xml
+*.class
+.idea/workspace.xml
+target/maven-archiver/pom.properties
+target/artifactid-1.0-SNAPSHOT.jar
+.idea/uiDesigner.xml
+Client.iml
+.idea/
