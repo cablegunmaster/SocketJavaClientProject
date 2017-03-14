@@ -22,8 +22,6 @@ public class View {
 
     public View() {
         mainFrame = new JFrame("Client module v0.1");
-
-
         mainFrame.setResizable(false);
         mainFrame.setSize(1024, 768);
 

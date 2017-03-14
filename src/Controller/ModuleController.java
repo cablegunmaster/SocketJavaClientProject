@@ -18,12 +18,7 @@ public class ModuleController implements GameModel {
     }
 
     @Override
-    public void sendChat(String message) {
-
-    }
-
-    @Override
-    public void receiveChat(String message) {
+    public void sendPM(String message, String Player) {
 
     }
 
@@ -43,8 +38,8 @@ public class ModuleController implements GameModel {
     }
 
     @Override
-    public void help() {
-
+    public String help() {
+        return null;
     }
 
     @Override
@@ -53,7 +48,8 @@ public class ModuleController implements GameModel {
     }
 
     @Override
-    public void status(String playerName) {
+    public String status(String playerName) {
+        return null;
         //current status of player.
     }
 }

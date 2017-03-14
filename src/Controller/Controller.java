@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.*;
+import Module.TicTacToe.TicTacToe;
 import View.*;
 import utils.Logger;
 
@@ -32,8 +33,14 @@ public class Controller {
 
     private void setListeners() {
         //view . add listener to object.
-        view.setConnectButton().addActionListener(this.connectListener());
+        view.getMainWindow().getLaunchButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TicTacToe();
+            }
+        });
 
+        view.setConnectButton().addActionListener(this.connectListener());
         view.getChatInput().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO add some logic to send this to the server.

@@ -26,19 +26,22 @@ public class MainWindow {
     private JScrollPane ChatScrollable;
 
     private JLabel connectionStatusLabel;
+
     private JButton launchButton;
-    private JComboBox ModuleList;
-    private JComboBox playerOneList;
+
     private JLabel PlayerLabel;
-    private JComboBox playerTwoList;
+    private JComboBox<String> moduleList;
 
+    private JComboBox<String> playerOneList;
+    private JComboBox<String> playerTwoList;
     public MainWindow() {
-    }
 
+    }
 
     public JButton setConnectButton() {
         return connectButton;
     }
+
 
     public JTextField getChatInputField() {
         return chatInputField;
@@ -66,5 +69,19 @@ public class MainWindow {
 
     public JLabel getConnectionStatusLabel() {
         return connectionStatusLabel;
+    }
+
+    private void createUIComponents() {
+        String[] modules = {"TicTacToe", "???"};
+        moduleList = new JComboBox<>(modules);
+
+        String[] players = {"Human", "Random", "Perfect"};
+        playerOneList = new JComboBox<>(players);
+        playerTwoList = new JComboBox<>(players);
+        // TODO: place custom component creation code here
+    }
+
+    public JButton getLaunchButton() {
+        return launchButton;
     }
 }

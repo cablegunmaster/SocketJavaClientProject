@@ -5,8 +5,8 @@ package Module.TicTacToe.Model.Player;
  */
 public class Human implements Player {
     @Override
-    public void Move() {
-
+    public int Move() {
+        return 0;
     }
 
     @Override

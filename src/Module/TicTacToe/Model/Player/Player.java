@@ -5,7 +5,7 @@ package Module.TicTacToe.Model.Player;
  */
 public interface Player {
 
-    void Move();
+    int Move();
 
     String Identifier();
 }

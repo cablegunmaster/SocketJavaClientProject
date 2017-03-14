@@ -1,17 +1,19 @@
 package Module.TicTacToe.Model;
 
-import Module.TicTacToe.Model.Player.*;
-import Module.TicTacToe.Model.Player.PlayerFactory;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+import Module.TicTacToe.View.View;
 
 /**
  * Created by jasper wil.lankhorst on 19-12-2016.
  */
 public class Model {
 
-    public int board[][] = new int[3][3]; //a board 3x3 filled with squares.
-    public int currentPlayer = 1; //1 is Player 1. 2 is ALWAYS the opponent. //0 is unclaimed.
-    public boolean gameEnded = false;
-    public Player player;
+    private int board[][] = new int[3][3]; //a board 3x3 filled with squares.
+    private int currentPlayer = 1; //1 is Player 1. 2 is ALWAYS the opponent. //0 is unclaimed.
+    private boolean gameEnded = false;
+    private View view;
 
     /**
      * Model to initialize the game functions.
@@ -20,19 +22,32 @@ public class Model {
     //TODO build end condition for the game.
     //TODO send message to server game has ended.
     //TODO accept a game from a user. /duel <Human> <tictactoe>
-    public Model() {
+    public Model(View view) {
         this.ResetBoard();
         gameEnded = false;
+        this.view = view;
     }
 
-    public void setPlayer(String playerType) {
-        this.player = PlayerFactory.createPlayer(playerType);
+    public int getPlayerFirst() {
+        //min is 1
+        //max is 2
+        int randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
+        return randomNum;
+    }
+
+    public void resetGame() {
+        this.ResetBoard();
+        gameEnded = false;
+        currentPlayer = getPlayerFirst();
     }
 
     /**
      * Resets the board with only zeros on every square.
      */
     public void ResetBoard() {
+        if(view != null) {
+            view.resetButtons();
+        }
         int length = board.length;
         for (int i = 1; i < length; i++) {
             for (int j = 0; j <= board[i][j]; j++) {
@@ -62,18 +77,16 @@ public class Model {
      */
     public boolean setMovePossible(int x, int y) {
         if (board[x][y] == 0) {
-            board[x][y] = currentPlayer;
             return true;
         }
         return false;
     }
 
-
     /**
      * @param i between 0 and 8
      * @return location array. [0] is X [1] is Y in location array.
      */
-    private int[] moveToArray(int i) {
+    public int[] moveToArray(int i) {
 
         if (!moveValid(i)) {
             return null;
@@ -84,6 +97,21 @@ public class Model {
         location[1] = i % 3; //Y location.
 
         return location;
+    }
+
+    public boolean checkValidMove(int i) {
+        int location[] = moveToArray(i);//convert to coordinates
+        if (location != null && location.length == 2) {
+            //location to be checked.
+            int x = location[0];
+            int y = location[1];
+
+            //if valid move set the move of current Human.
+            if (setMovePossible(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setMove(int i) {
@@ -97,13 +125,24 @@ public class Model {
 
             //if valid move set the move of current Human.
             if (setMovePossible(x, y)) {
-                changeCurrentPlayer();
+                board[x][y] = currentPlayer;
+                int winner = checkWin();
+                view.setMove(i, currentPlayer);
+
+                if (!gameEnded && winner == 0) {
+                    changeCurrentPlayer();
+                } else {
+                    //send move to other player before ending the game.
+                    gameEnded = true;
+                }
+
             } else {
-                //TODO print this to the view.
+                //TODO print to the view.
                 System.out.println("Move is invalid");
             }
         }
     }
+
 
     public void changeCurrentPlayer() {
         if (currentPlayer == 1) {
@@ -114,18 +153,38 @@ public class Model {
     }
 
     /**
-     * Checks if a Human has won.
+     * Checks if a Person has won.
      */
     public int checkWin() {
-
-        int winner = 0;
-        for (int i = 0; i < board.length; i++) {
-
-            for (int j = 0; j < board[0].length; j++) {
-
-            }
+        Boolean winningRow = false;
+        //Check if winningrow is winning.
+        winningRow = checkWinner(currentPlayer);
+        if (winningRow) {
+            return currentPlayer;
         }
-        return winner;
+        return 0;
+    }
+
+    public Boolean checkWinner(Integer player) {
+        //Horizontal wins.
+        if (board[0][0] == player && board[0][1] == player && board[0][2] == player ||
+                board[1][0] == player && board[1][1] == player && board[1][2] == player ||
+                board[2][0] == player && board[2][1] == player && board[2][2] == player) {
+            return true;
+        }
+
+        //Vertical win.
+        if (board[0][0] == player && board[1][0] == player && board[2][0] == player ||
+                board[0][1] == player && board[1][1] == player && board[2][1] == player ||
+                board[0][2] == player && board[1][2] == player && board[2][2] == player) {
+            return true;
+        }
+
+        //Diagonal win.
+        if (checkDiagonalWin(player)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -133,41 +192,30 @@ public class Model {
      *
      * @return integer 0 if nobody won diagonal 1 if own Human won. 2 if opponent won.
      */
-    public int checkDiagonalWin() {
+    public Boolean checkDiagonalWin(Integer player) {
 
         // X - -
         // - X -
         // - - X
         //left above - mid - right below. P1.
-        if (board[0][0] == 1
-                && board[1][1] == 1
-                && board[2][2] == 1) {
-            return 1;
-        }
-
-        //left below - mid - right below P2
-        if (board[0][0] == 2
-                && board[1][1] == 2
-                && board[2][2] == 2) {
-            return 2;
+        if (board[0][0] == player
+                && board[1][1] == player
+                && board[2][2] == player) {
+            return true;
         }
 
         // - - X
         // - X -
         // X - -
-        if (board[0][2] == 2
-                && board[1][1] == 2
-                && board[2][0] == 2) {
-            return 1;
+        if (board[0][2] == player
+                && board[1][1] == player
+                && board[2][0] == player) {
+            return true;
         }
 
-        if (board[0][2] == 1
-                && board[1][1] == 1
-                && board[2][0] == 1) {
-            return 1;
-        }
-        return 0;
+        return false;
     }
+
 
     /**
      * Get the board displayed in a board.
@@ -210,5 +258,17 @@ public class Model {
                 token = "!";
         }
         return token;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    public int[][] getBoard() {
+        return board;
     }
 }
