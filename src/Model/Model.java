@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.Controller;
+import Controller.MainController;
 import utils.Logger;
 
 import java.io.*;
@@ -45,7 +45,7 @@ public class Model {
         return socket;
     }
 
-    public Thread setListenThread(Socket clientSocket, Controller controller) {
+    public Thread setListenThread(Socket clientSocket, MainController controller) {
         Thread t = new Thread(new ListenThread(clientSocket, controller));
         t.start();
         return t;

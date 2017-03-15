@@ -19,7 +19,7 @@ public class Run {
 
         Model model = new Model();
         View view = new View();
-        Controller controller = new Controller(model, view);
+        MainController controller = new MainController(model, view);
 
         Run.checkPortNumber(view, model, args);
 

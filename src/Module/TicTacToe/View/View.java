@@ -17,6 +17,7 @@ public class View {
     }
 
 
+
     //Middle part.
     public void UI(){
 
@@ -45,6 +46,7 @@ public class View {
         board.setLayout(new GridLayout(3,3));
         for(int i = 0; i<= 8 ;i++){
             moveButton[i] = new JButton("-");
+            moveButton[i].setFont(new Font("Arial", Font.PLAIN, 96));
             board.add(moveButton[i]);
         }
         return board;

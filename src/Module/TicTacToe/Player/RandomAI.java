@@ -21,7 +21,7 @@ public class RandomAI extends Player {
     }
 
     public RandomAI(Model model, int playerNumber) {
-        this.playerNumber =playerNumber;
+        this.playerNumber = playerNumber;
         this.model = model;
     }
 
@@ -29,17 +29,23 @@ public class RandomAI extends Player {
 
         while (!model.isGameEnded()) {
             if (model.getCurrentPlayer() == playerNumber) {
+
+                try {
+                    sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 int i = makeMove();
                 if (model.checkValidMove(i)) {
                     model.setMove(i);
                 }
+
             } else {
                 try {
                     sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
@@ -55,7 +61,7 @@ public class RandomAI extends Player {
     public int makeMove() {
         //min is 0
         //max is 8
-        return ThreadLocalRandom.current().nextInt(0, 8 + 0);
+        return ThreadLocalRandom.current().nextInt(0, 9 + 0);
     }
 
     @Override

@@ -23,19 +23,19 @@ public class Controller implements GameModel {
     //combine this to the JComboBox.
     public void setPlayerOne(String playerOneIdentifier) {
         Player playerOne = PlayerFactory.createPlayer(playerOneIdentifier, model, 1);
-        if (playerOne.identifier().contains("AI")) {
+        //if (playerOne.identifier().contains("AI")) {
             Thread t = new Thread(playerOne);
             t.start();
-        }
+       // }
     }
 
 
     public void setPlayerTwo(String playerTwoIdentifier) {
         Player playerTwo = PlayerFactory.createPlayer(playerTwoIdentifier, model, 2);
-        if (playerTwo.identifier().contains("AI")) {
+        //if (playerTwo.identifier().contains("AI")) {
             Thread t = new Thread(playerTwo);
             t.start();
-        }
+        //}
     }
 
 

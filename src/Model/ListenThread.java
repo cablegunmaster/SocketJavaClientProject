@@ -1,20 +1,16 @@
 package Model;
 
-import Controller.Controller;
+import Controller.MainController;
 import View.View;
-import com.sun.deploy.util.StringUtils;
 import utils.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
 
 /**
@@ -24,10 +20,10 @@ public class ListenThread implements Runnable {
 
     Model model;
     View view;
-    Controller controller;
+    MainController controller;
     Socket clientSocket;
 
-    public ListenThread(Socket clientSocket, Controller controller) {
+    public ListenThread(Socket clientSocket, MainController controller) {
         this.controller = controller;
         this.model = controller.getModel();
         this.view = controller.getView();

@@ -16,16 +16,16 @@ import java.util.Date;
  * Created by jasper wil.lankhorst on 18-11-2016.
  * //TODO split this better and make a format for command:  <arg[0] command> SPACE <arg[1] Human> SPACE <arg [2] ignore || chatmsg >
  */
-public class Controller {
+public class MainController {
 
     private Model model;
     private View view;
-    private Controller controller;
+    private MainController mainController;
 
-    public Controller(Model m, View v) {
+    public MainController(Model m, View v) {
         this.model = m;
         this.view = v;
-        this.controller = this;
+        this.mainController = this;
 
         //build up the listeners, this will help the buttons interact with the rest.
         setListeners();
@@ -36,7 +36,9 @@ public class Controller {
         view.getMainWindow().getLaunchButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new TicTacToe();
+                String playerOne = view.getMainWindow().getPlayerOneList().getModel().getSelectedItem().toString();
+                String playerTwo = view.getMainWindow().getPlayerTwoList().getModel().getSelectedItem().toString();
+                new TicTacToe(playerOne, playerTwo);
             }
         });
 
@@ -44,7 +46,7 @@ public class Controller {
         view.getChatInput().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO add some logic to send this to the server.
-                //Refactor to the Controller.
+                //Refactor to the MainController.
                 String input = view.getChatInput().getText();
                 if (model.isConnected()) {
 
@@ -97,7 +99,7 @@ public class Controller {
                     //if succesfull connected change text
                     if (socket != null && model.isConnected()) {
                         view.setConnectButton().setText("Disconnect");
-                        Thread thread = model.setListenThread(socket, controller);
+                        Thread thread = model.setListenThread(socket, mainController);
                         Logger.get().log("Succesfully connected");
                         addStringToChat("Succesfully connected:");
                         view.getMainFrame().setTitle("Client module v0.1 - Connected to the server.");

@@ -24,16 +24,13 @@ public class MainWindow {
     private JPanel mainPanel;
     private JLabel chatLabel;
     private JScrollPane ChatScrollable;
-
     private JLabel connectionStatusLabel;
-
     private JButton launchButton;
-
     private JLabel PlayerLabel;
     private JComboBox<String> moduleList;
-
     private JComboBox<String> playerOneList;
     private JComboBox<String> playerTwoList;
+
     public MainWindow() {
 
     }
@@ -42,10 +39,10 @@ public class MainWindow {
         return connectButton;
     }
 
-
     public JTextField getChatInputField() {
         return chatInputField;
     }
+
 
     public JTextArea getUserListTextArea() {
         return userListTextArea;
@@ -83,5 +80,13 @@ public class MainWindow {
 
     public JButton getLaunchButton() {
         return launchButton;
+    }
+
+    public JComboBox<String> getPlayerOneList() {
+        return playerOneList;
+    }
+
+    public JComboBox<String> getPlayerTwoList() {
+        return playerTwoList;
     }
 }
