@@ -1,28 +1,28 @@
-package Module.TicTacToe.Model.Player;
+package Module.TicTacToe.Player;
 
 import Module.TicTacToe.Model.Model;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by jasper wil.lankhorst on 12-3-2017.
  */
-public class RandomAI extends Thread implements Player {
+public class RandomAI extends Player {
 
     Model model;
     int playerNumber;
+    private Thread t;
 
     @Override
-    public int Move() {
+    public int move() {
         return makeMove();
     }
 
-    public RandomAI(Model model) {
+    public RandomAI(Model model, int playerNumber) {
+        this.playerNumber =playerNumber;
         this.model = model;
-    }
-
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
     }
 
     public void run() {
@@ -44,6 +44,14 @@ public class RandomAI extends Thread implements Player {
         }
     }
 
+    public void start() {
+        System.out.println("Starting: " + identifier());
+        if (t == null) {
+            t = new Thread(this, identifier());
+            t.start();
+        }
+    }
+
     public int makeMove() {
         //min is 0
         //max is 8
@@ -51,7 +59,16 @@ public class RandomAI extends Thread implements Player {
     }
 
     @Override
-    public String Identifier() {
+    public String identifier() {
         return "Random AI";
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
+    @Override
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 }

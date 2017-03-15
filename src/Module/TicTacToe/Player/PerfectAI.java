@@ -1,13 +1,15 @@
-package Module.TicTacToe.Model.Player;
+package Module.TicTacToe.Player;
 
 import Module.TicTacToe.Model.Model;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by jasper wil.lankhorst on 12-3-2017.
  */
-public class PerfectAI extends Thread implements Player {
+public class PerfectAI extends Player {
 
     //https://www.tutorialspoint.com/java/java_multithreading.htm
     //http://neverstopbuilding.com/minimax
@@ -17,18 +19,14 @@ public class PerfectAI extends Thread implements Player {
     int playerNumber;
 
     @Override
-    public int Move() {
+    public int move() {
         return makeMove();
     }
 
-    public PerfectAI(Model model) {
+    public PerfectAI(Model model, int playerNumber) {
         this.model = model;
-    }
-
-    public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
-
 
     public void run() {
 
@@ -55,8 +53,18 @@ public class PerfectAI extends Thread implements Player {
         return ThreadLocalRandom.current().nextInt(0, 8 + 0);
     }
 
+
     @Override
-    public String Identifier() {
+    public String identifier() {
         return "Perfect AI";
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
+    @Override
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 }

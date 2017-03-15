@@ -1,4 +1,4 @@
-package Module.TicTacToe.Model.Player;
+package Module.TicTacToe.Player;
 
 import Module.TicTacToe.Model.Model;
 
@@ -8,21 +8,21 @@ import Module.TicTacToe.Model.Model;
  */
 public class PlayerFactory {
 
-    public static Player createPlayer(String playerType, Model model) {
+    public static Player createPlayer(String playerType, Model model, int playerNumber) {
         if (playerType == null) {
             return null;
         }
 
         if (playerType.equals("Player")) {
-            return new Human();
+            return new Human(model,playerNumber);
         }
 
         if (playerType.equals("Random")) {
-            return new RandomAI(model);
+            return new RandomAI(model, playerNumber);
         }
 
         if (playerType.equals("Perfect")) {
-            return new PerfectAI(model);
+            return new PerfectAI(model, playerNumber);
         }
         return null;
     }

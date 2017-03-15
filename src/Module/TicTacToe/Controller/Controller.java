@@ -1,6 +1,8 @@
 package Module.TicTacToe.Controller;
 
 import Module.TicTacToe.Model.Model;
+import Module.TicTacToe.Player.Player;
+import Module.TicTacToe.Player.PlayerFactory;
 import Module.TicTacToe.View.View;
 import Model.GameModel;
 
@@ -17,6 +19,25 @@ public class Controller implements GameModel {
         this.view = view;
         this.model = model;
     }
+
+    //combine this to the JComboBox.
+    public void setPlayerOne(String playerOneIdentifier) {
+        Player playerOne = PlayerFactory.createPlayer(playerOneIdentifier, model, 1);
+        if (playerOne.identifier().contains("AI")) {
+            Thread t = new Thread(playerOne);
+            t.start();
+        }
+    }
+
+
+    public void setPlayerTwo(String playerTwoIdentifier) {
+        Player playerTwo = PlayerFactory.createPlayer(playerTwoIdentifier, model, 2);
+        if (playerTwo.identifier().contains("AI")) {
+            Thread t = new Thread(playerTwo);
+            t.start();
+        }
+    }
+
 
     public void sendMove(int i) {
         model.setMove(i);
@@ -36,17 +57,17 @@ public class Controller implements GameModel {
 
     @Override
     public void requestDuel(String playerName, String game) {
-            //Request duel to other player.
+        //Request duel to other player.
     }
 
     @Override
     public void acceptDuel(String duelRequestName) {
-            //Accept duel. (send duel request to other player.)
+        //Accept duel. (send duel request to other player.)
     }
 
     @Override
     public void cancelRequestDuel(String duelRequestName) {
-            //send duel request to player.
+        //send duel request to player.
     }
 
     @Override
