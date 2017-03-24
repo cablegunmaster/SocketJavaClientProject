@@ -1,7 +1,7 @@
 package tests;
 
-import Module.TicTacToe.Model.Model;
 import Module.TicTacToe.View.View;
+import Module.TicTacToe.Model.Board;
 
 /**
  * Created by jasper wil.lankhorst on 19-12-2016.
@@ -24,7 +24,7 @@ public class testBoard {
         View v = new View();
         v.mainFrame.setVisible(false);
 
-        Model m = new Model(v);
+       /* Board m = new Board(v);
         m.setMove(2);
         m.toString();
         m.setMove(4); //other player
@@ -38,9 +38,9 @@ public class testBoard {
         m.setMove(7);
         m.toString();
         m.setMove(5);
-        m.toString();
+        m.toString();*
         int i = m.checkWin();
-        System.out.println("won:" + i);
+        System.out.println("won:" + i);*/
     }
 
     public boolean moveValid(int i) {

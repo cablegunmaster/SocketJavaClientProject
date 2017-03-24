@@ -1,16 +1,17 @@
 package Module.TicTacToe.Player;
 
-import Module.TicTacToe.Model.Model;
+import Module.TicTacToe.Model.Board;
+
 /**
  * Created by jasper wil.lankhorst on 12-3-2017.
  */
 public class Human extends Player {
 
     int playerNumber;
-    Model model;
+    Board board;
 
-    public Human(Model model, int playerNumber){
-        this.model = model;
+    public Human(Board board, int playerNumber) {
+        this.board = board;
         this.playerNumber = playerNumber;
     }
 

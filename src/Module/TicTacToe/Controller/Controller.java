@@ -1,10 +1,14 @@
 package Module.TicTacToe.Controller;
 
-import Module.TicTacToe.Model.Model;
+import Model.GameModel;
+import Module.TicTacToe.Model.Board;
 import Module.TicTacToe.Player.Player;
 import Module.TicTacToe.Player.PlayerFactory;
 import Module.TicTacToe.View.View;
-import Model.GameModel;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by jasper wil.lankhorst on 25-2-2017.
@@ -12,30 +16,58 @@ import Model.GameModel;
 public class Controller implements GameModel {
 
     View view;
-    Model model;
+    Board model;
     Controller controller;
 
-    public Controller(View view, Model model) {
+    public Controller(View view, Board model) {
         this.view = view;
         this.model = model;
+        setListeners();
+    }
+
+    public class ButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if (!model.isGameEnded()) {
+                JButton[] jButtonList = view.getJButtonList();
+                for (JButton button : jButtonList) {
+                    if (e.getSource() == button) {
+                        int identifier = -1;
+                        Object property = button.getClientProperty("id");
+                        if (property instanceof Integer) {
+                            identifier = ((Integer) property);
+                            // do stuff
+                        }
+
+                        if (button.getText().equals("-")) {
+                            button.setText(model.numberToToken(model.getCurrentPlayer()));
+                            model.setMove(identifier);
+                        }
+                    }
+                }
+            } else {
+                System.out.println("BYE BYE PLAY AGAIN.");
+            }
+        }
+    }
+
+    public void setListeners() {
+        JButton[] jButtonList = view.getJButtonList();
+        for (JButton button : jButtonList) {
+            button.addActionListener(new ButtonListener());
+        }
     }
 
     //combine this to the JComboBox.
     public void setPlayerOne(String playerOneIdentifier) {
-        Player playerOne = PlayerFactory.createPlayer(playerOneIdentifier, model, 1);
-        //if (playerOne.identifier().contains("AI")) {
-            Thread t = new Thread(playerOne);
-            t.start();
-       // }
+        model.setPlayerOne(playerOneIdentifier);
     }
 
 
     public void setPlayerTwo(String playerTwoIdentifier) {
-        Player playerTwo = PlayerFactory.createPlayer(playerTwoIdentifier, model, 2);
-        //if (playerTwo.identifier().contains("AI")) {
-            Thread t = new Thread(playerTwo);
-            t.start();
-        //}
+        model.setPlayerTwo(playerTwoIdentifier);
     }
 
 

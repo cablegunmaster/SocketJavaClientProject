@@ -1,8 +1,7 @@
 package Module.TicTacToe;
 
-import Controller.MainController;
 import Module.TicTacToe.Controller.Controller;
-import Module.TicTacToe.Model.Model;
+import Module.TicTacToe.Model.Board;
 import Module.TicTacToe.View.View;
 
 /**
@@ -10,14 +9,14 @@ import Module.TicTacToe.View.View;
  */
 public class TicTacToe {
 
-    Model model;
+    Board board;
     View view;
 
     public TicTacToe(String playerOne, String playerTwo) {
 
         view = new View();
-        model = new Model(view);
-        Controller controller = new Controller(view, model); //MainController of the
+        board = new Board(view);
+        Controller controller = new Controller(view, board); //MainController of the
 
         controller.setPlayerOne(playerOne);
         controller.setPlayerTwo(playerTwo);

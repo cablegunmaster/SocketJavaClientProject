@@ -9,7 +9,7 @@ import java.awt.*;
 public class View {
 
     public JFrame mainFrame = null;
-    public JButton moveButton[] = new JButton[9];
+    private JButton moveButton[] = new JButton[9];
     public String[] players = {"Human", "Random", "Perfect"};
 
     public View() {
@@ -17,10 +17,8 @@ public class View {
     }
 
 
-
     //Middle part.
-    public void UI(){
-
+    public void UI() {
         mainFrame = new JFrame("TicTacToe module v0.1");
         mainFrame.setResizable(false);
         mainFrame.setSize(1024, 768);
@@ -41,30 +39,37 @@ public class View {
         mainFrame.revalidate();
     }
 
-    public JPanel createBoard(){
+    public JPanel createBoard() {
         JPanel board = new JPanel();
-        board.setLayout(new GridLayout(3,3));
-        for(int i = 0; i<= 8 ;i++){
+        board.setLayout(new GridLayout(3, 3));
+        for (int i = 0; i <= 8; i++) {
             moveButton[i] = new JButton("-");
             moveButton[i].setFont(new Font("Arial", Font.PLAIN, 96));
+            moveButton[i].putClientProperty("id", i); //set ID on it.
             board.add(moveButton[i]);
         }
         return board;
     }
 
 
-    public void setMove(int move, int player){
-        JButton button = moveButton[move] ;
-        if(player == 1){
+    public void setMove(int move, int player) {
+        JButton button = moveButton[move];
+        if (player == 1) {
             button.setText("X");
-        }else{
+        } else {
             button.setText("O");
         }
     }
 
-    public void resetButtons(){
-        for(int i = 0; i<= 8 ;i++){
-            moveButton[i] = new JButton("-");
+    public void resetButtons() {
+        for (int i = 0; i <= 8; i++) {
+            moveButton[i].setText("-");
         }
     }
+
+    public JButton[] getJButtonList(){
+        return moveButton;
+    }
+
+
 }

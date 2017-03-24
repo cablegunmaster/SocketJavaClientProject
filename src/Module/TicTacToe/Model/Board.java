@@ -1,29 +1,39 @@
 package Module.TicTacToe.Model;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import Module.TicTacToe.Player.Player;
+import Module.TicTacToe.Player.PlayerFactory;
 import Module.TicTacToe.View.View;
 
 /**
  * Created by jasper wil.lankhorst on 19-12-2016.
  */
-public class Model {
+public class Board {
 
+    List<Point> availablePoints;
     private int board[][] = new int[3][3]; //a board 3x3 filled with squares.
     private int currentPlayer = 1; //1 is Player 1. 2 is ALWAYS the opponent. //0 is unclaimed.
+
     private boolean gameEnded = false;
     private View view;
+    private String playerOneIdentifier;
+    private String playerTwoIdentifier;
+    private Thread one;
+    private Thread two;
 
     /**
-     * Model to initialize the game functions.
+     * Board to initialize the game functions.
      */
 
     //TODO build end condition for the game.
     //TODO send message to server game has ended.
     //TODO accept a game from a user. /duel <Human> <tictactoe>
-    public Model(View view) {
-        this.ResetBoard();
+    public Board(View view) {
+        this.resetGame();
         gameEnded = false;
         this.view = view;
     }
@@ -36,21 +46,41 @@ public class Model {
     }
 
     public void resetGame() {
-        this.ResetBoard();
+
         gameEnded = false;
+        System.out.println(toString());
+        this.ResetBoard();
         currentPlayer = getPlayerFirst();
     }
+
+
+    public List<Point> getAvailableStates() {
+        availablePoints = new ArrayList<>();
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (board[i][j] == 0) {
+                    availablePoints.add(new Point(i, j));
+                }
+            }
+        }
+        return availablePoints;
+    }
+
 
     /**
      * Resets the board with only zeros on every square.
      */
     public void ResetBoard() {
-        if(view != null) {
+        if (view != null) {
             view.resetButtons();
+            view.refresh();
         }
+
         int length = board.length;
-        for (int i = 1; i < length; i++) {
-            for (int j = 0; j <= board[i][j]; j++) {
+        int width = board[0].length;
+
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < width; j++) {
                 board[i][j] = 0;
             }
         }
@@ -114,7 +144,7 @@ public class Model {
         return false;
     }
 
-    public void setMove(int i) {
+    public synchronized void setMove(int i) {
 
         int location[] = this.moveToArray(i);//convert to coordinates
         if (location != null && location.length == 2) {
@@ -134,10 +164,13 @@ public class Model {
                 } else {
                     //send move to other player before ending the game.
                     gameEnded = true;
+                    System.out.println("Player " + getCurrentPlayer() + " has won!");
+
+                    //Reset game.
+                    resetGame();
                 }
 
             } else {
-                //TODO print to the view.
                 System.out.println("Move is invalid");
             }
         }
@@ -162,6 +195,12 @@ public class Model {
         if (winningRow) {
             return currentPlayer;
         }
+
+        List<Point> pointsAvailable = getAvailableStates();
+        if (pointsAvailable.isEmpty()) {
+            return -1;
+        }
+
         return 0;
     }
 
@@ -222,7 +261,7 @@ public class Model {
      *
      * @return String with the current board.
      */
-    public String toString() {
+    public synchronized String toString() {
         System.out.println("Board:");
         String row;
         for (int i = 0; i < board.length; i++) {
@@ -241,7 +280,7 @@ public class Model {
      * @param i number is 0 || 1 own Human X || 2 other Human O
      * @return String containing a single letter (could be char).
      */
-    private String numberToToken(int i) {
+    public String numberToToken(int i) {
 
         String token = null;
         switch (i) {
@@ -270,5 +309,20 @@ public class Model {
 
     public int[][] getBoard() {
         return board;
+    }
+
+
+    public void setPlayerTwo(String playerTwo) {
+        this.playerTwoIdentifier = playerTwo;
+        Player player = PlayerFactory.createPlayer(playerTwo, this, 2);
+        two = new Thread(player);
+        two.start();
+    }
+
+    public void setPlayerOne(String playerOne) {
+        this.playerOneIdentifier = playerOne;
+        Player player = PlayerFactory.createPlayer(playerOne, this, 1);
+        one = new Thread(player);
+        one.start();
     }
 }
