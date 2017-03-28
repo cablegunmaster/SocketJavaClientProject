@@ -71,6 +71,12 @@ public class Board {
      * Resets the board with only zeros on every square.
      */
     public void ResetBoard() {
+
+        try {
+            Thread.sleep(1500);
+        }catch (InterruptedException ex){
+           ex.getStackTrace();
+        }
         if (view != null) {
             view.resetButtons();
             view.refresh();
@@ -144,6 +150,30 @@ public class Board {
         return false;
     }
 
+    public synchronized void setMove(int x,int y){
+        if (setMovePossible(x, y)) {
+            board[x][y] = currentPlayer;
+            int winner = checkWin();
+
+            int i = ( x * 3) + y; //coordinates to int
+            view.setMove(i, currentPlayer);
+
+            if (!gameEnded && winner == 0) {
+                changeCurrentPlayer();
+            } else {
+                //send move to other player before ending the game.
+                gameEnded = true;
+                System.out.println("Player " + getCurrentPlayer() + " has won!");
+
+                //Reset game.
+                resetGame();
+            }
+
+        } else {
+            System.out.println("Move is invalid");
+        }
+    }
+
     public synchronized void setMove(int i) {
 
         int location[] = this.moveToArray(i);//convert to coordinates
@@ -152,27 +182,7 @@ public class Board {
             //location to be checked.
             int x = location[0];
             int y = location[1];
-
-            //if valid move set the move of current Human.
-            if (setMovePossible(x, y)) {
-                board[x][y] = currentPlayer;
-                int winner = checkWin();
-                view.setMove(i, currentPlayer);
-
-                if (!gameEnded && winner == 0) {
-                    changeCurrentPlayer();
-                } else {
-                    //send move to other player before ending the game.
-                    gameEnded = true;
-                    System.out.println("Player " + getCurrentPlayer() + " has won!");
-
-                    //Reset game.
-                    resetGame();
-                }
-
-            } else {
-                System.out.println("Move is invalid");
-            }
+            setMove(x,y);
         }
     }
 
@@ -312,6 +322,13 @@ public class Board {
     }
 
 
+    public void setPlayerOne(String playerOne) {
+        this.playerOneIdentifier = playerOne;
+        Player player = PlayerFactory.createPlayer(playerOne, this, 1);
+        one = new Thread(player);
+        one.start();
+    }
+
     public void setPlayerTwo(String playerTwo) {
         this.playerTwoIdentifier = playerTwo;
         Player player = PlayerFactory.createPlayer(playerTwo, this, 2);
@@ -319,10 +336,8 @@ public class Board {
         two.start();
     }
 
-    public void setPlayerOne(String playerOne) {
-        this.playerOneIdentifier = playerOne;
-        Player player = PlayerFactory.createPlayer(playerOne, this, 1);
-        one = new Thread(player);
-        one.start();
+
+    public void placeAMove(Point point, int player) {
+        board[point.x][point.y] = player;   //player = 1 for X, 2 for O
     }
 }
