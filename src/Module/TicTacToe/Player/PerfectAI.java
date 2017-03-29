@@ -2,7 +2,6 @@ package Module.TicTacToe.Player;
 
 import Module.TicTacToe.Model.Board;
 import Module.TicTacToe.Model.Point;
-import Module.TicTacToe.Model.PointsAndScores;
 
 import java.util.ArrayList;
 import java.util.List;
